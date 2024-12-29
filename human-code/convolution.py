@@ -1,17 +1,16 @@
 import os
 import numpy as np
 from image_utils import image_to_numpy
-from scipy.fft import fft2, ifft2
 from image_utils import numpy_to_image
+from numpy.fft import fft2, ifft2
 
-
-# Define the path to the images folder
+#path to the images folder
 images_folder = '/Users/lizhuoxuan/Documents/coding B1/b1-codingproject-mtholiday2024/images'
 
-# Initialize a list to store the numpy arrays
+# Storage of np array of images
 numpy_arrays = []
 
-# Iterate over each file in the images folder
+# using image_to_numpy to convert each image into B/W numpy arrays
 for filename in os.listdir(images_folder):
     if filename.endswith(('.png', '.jpg', '.JPEG')):  # Check for image file extensions
         # Construct the full file path
@@ -30,7 +29,9 @@ for filename in os.listdir(images_folder):
             numpy_arrays.append(image_array)
             print(f"Successfully processed: {filename}")
 
-print(f"Found {len(numpy_arrays)} images to process")
+print(f"Processed {len(numpy_arrays)} images")
+
+
 def apply_fft_convolution(image_array, kernel):
     # Get the dimensions of the image and kernel
     rows, cols = image_array.shape
@@ -40,7 +41,7 @@ def apply_fft_convolution(image_array, kernel):
     out_rows = rows + krows - 1
     out_cols = cols + kcols - 1
 
-    # Pad both image and kernel to match output dimensions
+    # Pad both image and kernel to match desired transform dimensions
     padded_image = np.pad(image_array, ((0, out_rows - rows), (0, out_cols - cols)), mode='constant')
     padded_kernel = np.pad(kernel, ((0, out_rows - krows), (0, out_cols - kcols)), mode='constant')
 
@@ -61,19 +62,18 @@ vertical_edge_kernel = np.array([
     [-1,  0,  0,  0,  1]
 ])
 
-# ...existing code...
+
 convolved_results = []
-# First process all images
+#process all images
 for arr in numpy_arrays:
     if arr is not None:
         result = apply_fft_convolution(arr, vertical_edge_kernel)
         convolved_results.append(result)
 
-# Then display all results
+#display all results
 for i, result in enumerate(convolved_results):
     if result is not None:
         print(f"Displaying image {i+1}")
         result_image = numpy_to_image(result)
-        if result_image:
-            result_image.show()  # Remove title parameter as it's not supported
+
 
