@@ -29,13 +29,12 @@ def apply_fft_edge_detection(image_path):
     edges = cv2.Canny(img_back, 100, 200)
     return edges
 
-input_folder = 'images'
+input_folder = os.path.join(os.getcwd(), 'coding B1', 'b1-codingproject-mtholiday2024', 'images')
 output_folder = 'edges'
-
 os.makedirs(output_folder, exist_ok=True)
 
 for filename in os.listdir(input_folder):
-    if filename.lower().endswith('.jpg') or filename.lower().endswith('.jpeg'):
+    if filename.lower().endswith(('.jpg')) or filename.lower().endswith(('.jpeg')):
         input_path = os.path.join(input_folder, filename)
         edges = apply_fft_edge_detection(input_path)
         output_path = os.path.join(output_folder, f'edges_{filename}')
@@ -43,8 +42,14 @@ for filename in os.listdir(input_folder):
         print(f'Processed {filename} and saved edges to {output_path}')
 
 # Display one of the edge images
-sample_edge = cv2.imread(os.path.join(output_folder, f'edges_{os.listdir(output_folder)[0]}'), cv2.IMREAD_GRAYSCALE)
-plt.imshow(sample_edge, cmap='gray')
-plt.title('Edge Detection Result')
-plt.axis('off')
-plt.show()
+file_list = os.listdir(output_folder)
+if file_list:
+    first_file = file_list[0]
+    sample_edge = cv2.imread(os.path.join(output_folder, f'edges_{first_file}'), cv2.IMREAD_GRAYSCALE)
+    plt.imshow(sample_edge, cmap='gray')
+    plt.title('Edge Detection Result')
+    plt.axis('off')
+    plt.show()
+else:
+    print("No processed images found in output_folder.")
+    
